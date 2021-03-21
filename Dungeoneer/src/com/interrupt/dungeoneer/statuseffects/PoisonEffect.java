@@ -35,6 +35,7 @@ public class PoisonEffect extends StatusEffect {
     private int poisonTexture = 80;
     private int poisonTextureVariations = 4;
 
+    private float scaleRandomness = 0.25f;
     private float startScale = 1f;
     private float endScale = 0.125f;
 
@@ -67,7 +68,7 @@ public class PoisonEffect extends StatusEffect {
 
 		if (this.particleTimer > this.particleInterval) {
 			this.particleTimer = 0f;
-			this.createPoisonParticle(owner, Game.rand.nextFloat() * 0.25f + 0.25f);
+			this.createPoisonParticle(owner, Game.rand.nextFloat() * scaleRandomness + scaleRandomness);
 		}
 
 		if(dtimer > damageTimer) {
@@ -273,5 +274,13 @@ public class PoisonEffect extends StatusEffect {
 
     public void setAudioRange(float audioRange) {
         this.audioRange = audioRange;
+    }
+
+    public float getScaleRandomness() {
+        return scaleRandomness;
+    }
+
+    public void setScaleRandomness(float scaleRandomness) {
+        this.scaleRandomness = scaleRandomness;
     }
 }
