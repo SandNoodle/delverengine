@@ -49,7 +49,7 @@ public class PoisonEffect extends StatusEffect {
     private float audioRange = 6f;
 
 	public PoisonEffect() {
-		this(1000, 160, 10, false);
+		this(1000, 160, 1, false);
 	}
 
 	public PoisonEffect(int time, int damageTimer, int damage, boolean canKill) {
