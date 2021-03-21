@@ -11,19 +11,46 @@ import com.interrupt.dungeoneer.game.Game;
 import com.interrupt.managers.StringManager;
 
 public class PoisonEffect extends StatusEffect {
-	public Particle effectParticle;
-	public Vector3 effectOffset = new Vector3(0.0f, 0.0f, 0.55f);
-	public float damageTimer = 60;
-	public int damage = 1;
-	private float dtimer = 0;
-	private boolean canKill = false;
-	private float particleInterval = 20f;
-	private float particleTimer = 0;
-	
+    // Poison effect properties
+    public float damageTimer = 60;
+    private float dtimer = 0;
+
+    public int damage = 1;
+    private boolean canKill = false;
+
+	// Particle properties
+    public Particle effectParticle;
+    public Vector3 effectOffset = new Vector3(0.0f, 0.0f, 0.55f);
+
+    private float spreadMod = 1f;
+    private float baseSpreadMod = 1f;
+    private float playerSpreadMod = 2.75f;
+    private float zMod = 0f;
+    private float baseZMod = 0f;
+    private float playerZMod = -0.3f;
+
+    private float particleInterval = 20f;
+    private float particleTimer = 0;
+
+    private int poisonTexture = 80;
+    private int poisonTextureVariations = 4;
+
+    private float startScale = 1f;
+    private float endScale = 0.125f;
+
+    private float particleLifetime = 90f;
+
+    private float upwardVelocity = 0.004f;
+
+    // Audio properties
+    private String poisonSound = "mg_pass_poison.mp3";
+    private float audioVolume = 0.5f;
+    private float audioRange = 6f;
+
 	public PoisonEffect() {
-		this(1000, 160, 1, false);
+		this(1000, 160, 10, false);
 	}
-	
+
 	public PoisonEffect(int time, int damageTimer, int damage, boolean canKill) {
 		this.name = StringManager.get("statuseffects.PoisonEffect.defaultNameText");
 		this.timer = time;
@@ -32,9 +59,9 @@ public class PoisonEffect extends StatusEffect {
 		this.damage = damage;
 		this.canKill = canKill;
 	}
-	
+
 	@Override
-	public void doTick(Actor owner, float delta) { 
+	public void doTick(Actor owner, float delta) {
 		dtimer += delta;
 		this.particleTimer += delta;
 
@@ -45,12 +72,14 @@ public class PoisonEffect extends StatusEffect {
 
 		if(dtimer > damageTimer) {
 			dtimer = 0;
-			if(owner.hp - damage <= 0 && !canKill ) return;
-			
-			owner.takeDamage(damage, DamageType.PHYSICAL, null);
+			if (owner.hp - damage <= 0 && !canKill ) {
+			    return;
+			}
+
+			owner.takeDamage(damage, DamageType.POISON, null);
 			this.doPoisonEffect(owner);
-			
-			Audio.playPositionedSound("mg_pass_poison.mp3", new Vector3(owner.x,owner.y,owner.z), 0.5f, 6f);
+
+			Audio.playPositionedSound(poisonSound, new Vector3(owner.x,owner.y,owner.z), audioVolume, audioRange);
 		}
 	}
 
@@ -71,19 +100,12 @@ public class PoisonEffect extends StatusEffect {
 			return;
 		}
 
-		float spreadMod = 1f;
-		float zMod = 0f;
-		if(owner instanceof Player) {
-			spreadMod = 2.75f;
-			zMod = -0.3f;
-		}
-
 		Particle p = CachePools.getParticle();
-		p.tex = 80 + Game.rand.nextInt(3);
-		p.lifetime = 90;
+		p.tex = poisonTexture + Game.rand.nextInt(poisonTextureVariations-1);
+		p.lifetime = particleLifetime;
 		p.scale = scale;
-		p.startScale = 1.0f;
-		p.endScale = 0.125f;
+		p.startScale = startScale;
+		p.endScale = endScale;
 		p.fullbrite = true;
 		p.checkCollision = false;
 		p.floating = true;
@@ -91,7 +113,7 @@ public class PoisonEffect extends StatusEffect {
 		p.y = owner.y + (Game.rand.nextFloat() * scale - (scale * 0.5f)) * spreadMod;
 		p.z = owner.z + zMod;
 
-		p.za = Game.rand.nextFloat() * 0.004f + 0.004f;
+		p.za = Game.rand.nextFloat() * upwardVelocity + upwardVelocity;
 
 		Game.GetLevel().SpawnNonCollidingEntity(p);
 	}
@@ -105,4 +127,151 @@ public class PoisonEffect extends StatusEffect {
 	public void onStatusEnd(Actor owner) {
 		this.active = false;
 	}
+
+    /** Calculates the Spread Modifier based on if the Entity is a Player instance */
+    private void calculateSpreadMod() {
+        if(owner instanceof Player) {
+            this.spreadMod = playerSpreadMod;
+            this.zMod = playerZMod;
+        } else {
+            this.spreadMod = baseSpreadMod;
+            this.zMod = baseZMod;
+        }
+    }
+
+    public float getDamageTimer() {
+        return damageTimer;
+    }
+
+    public void setDamageTimer(float damageTimer) {
+        this.damageTimer = damageTimer;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public boolean isCanKill() {
+        return canKill;
+    }
+
+    public void setCanKill(boolean canKill) {
+        this.canKill = canKill;
+    }
+
+    public float getBaseSpreadMod() {
+        return baseSpreadMod;
+    }
+
+    public void setBaseSpreadMod(float baseSpreadMod) {
+        this.baseSpreadMod = baseSpreadMod;
+    }
+
+    public float getPlayerSpreadMod() {
+        return playerSpreadMod;
+    }
+
+    public void setPlayerSpreadMod(float playerSpreadMod) {
+        this.playerSpreadMod = playerSpreadMod;
+    }
+
+    public float getBaseZMod() {
+        return baseZMod;
+    }
+
+    public void setBaseZMod(float baseZMod) {
+        this.baseZMod = baseZMod;
+    }
+
+    public float getPlayerZMod() {
+        return playerZMod;
+    }
+
+    public void setPlayerZMod(float playerZMod) {
+        this.playerZMod = playerZMod;
+    }
+
+    public float getParticleInterval() {
+        return particleInterval;
+    }
+
+    public void setParticleInterval(float particleInterval) {
+        this.particleInterval = particleInterval;
+    }
+
+    public int getPoisonTexture() {
+        return poisonTexture;
+    }
+
+    public void setPoisonTexture(int poisonTexture) {
+        this.poisonTexture = poisonTexture;
+    }
+
+    public int getPoisonTextureVariations() {
+        return poisonTextureVariations;
+    }
+
+    public void setPoisonTextureVariations(int poisonTextureVariations) {
+        this.poisonTextureVariations = poisonTextureVariations;
+    }
+
+    public float getStartScale() {
+        return startScale;
+    }
+
+    public void setStartScale(float startScale) {
+        this.startScale = startScale;
+    }
+
+    public float getEndScale() {
+        return endScale;
+    }
+
+    public void setEndScale(float endScale) {
+        this.endScale = endScale;
+    }
+
+    public float getParticleLifetime() {
+        return particleLifetime;
+    }
+
+    public void setParticleLifetime(float particleLifetime) {
+        this.particleLifetime = particleLifetime;
+    }
+
+    public float getUpwardVelocity() {
+        return upwardVelocity;
+    }
+
+    public void setUpwardVelocity(float upwardVelocity) {
+        this.upwardVelocity = upwardVelocity;
+    }
+
+    public String getPoisonSound() {
+        return poisonSound;
+    }
+
+    public void setPoisonSound(String poisonSound) {
+        this.poisonSound = poisonSound;
+    }
+
+    public float getAudioVolume() {
+        return audioVolume;
+    }
+
+    public void setAudioVolume(float audioVolume) {
+        this.audioVolume = audioVolume;
+    }
+
+    public float getAudioRange() {
+        return audioRange;
+    }
+
+    public void setAudioRange(float audioRange) {
+        this.audioRange = audioRange;
+    }
 }
