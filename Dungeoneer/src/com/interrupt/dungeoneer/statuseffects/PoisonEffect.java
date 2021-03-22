@@ -81,7 +81,7 @@ public class PoisonEffect extends StatusEffect {
 			owner.takeDamage(damage, DamageType.POISON, null);
 			this.doPoisonEffect(owner);
 
-			Audio.playPositionedSound(poisonSound, new Vector3(owner.x,owner.y,owner.z), audioVolume, audioRange);
+			Audio.playPositionedSound(poisonSound, new Vector3(owner.x,owner.y,owner.z), soundVolume, soundRange);
 		}
 	}
 
@@ -262,19 +262,19 @@ public class PoisonEffect extends StatusEffect {
     }
 
     public float getAudioVolume() {
-        return audioVolume;
+        return soundVolume;
     }
 
-    public void setAudioVolume(float audioVolume) {
-        this.audioVolume = audioVolume;
+    public void setAudioVolume(float soundVolume) {
+        this.soundVolume = soundVolume;
     }
 
     public float getAudioRange() {
-        return audioRange;
+        return soundRange;
     }
 
     public void setAudioRange(float audioRange) {
-        this.audioRange = audioRange;
+        this.soundRange = audioRange;
     }
 
     public float getScaleRandomness() {
