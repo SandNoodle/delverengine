@@ -25,6 +25,7 @@ public class PoisonEffect extends StatusEffect {
     private float spreadMod = 1f;
     private float baseSpreadMod = 1f;
     private float playerSpreadMod = 2.75f;
+
     private float zMod = 0f;
     private float baseZMod = 0f;
     private float playerZMod = -0.3f;
@@ -32,8 +33,8 @@ public class PoisonEffect extends StatusEffect {
     private float particleInterval = 20f;
     private float particleTimer = 0;
 
-    private int poisonTexture = 80;
-    private int poisonTextureVariations = 4;
+    private int particleTexture = 80;
+    private int particleTextureVariations = 4;
 
     private float scaleRandomness = 0.25f;
     private float startScale = 1f;
@@ -45,8 +46,8 @@ public class PoisonEffect extends StatusEffect {
 
     // Audio properties
     private String poisonSound = "mg_pass_poison.mp3";
-    private float audioVolume = 0.5f;
-    private float audioRange = 6f;
+    private float soundVolume = 0.5f;
+    private float soundRange = 6f;
 
 	public PoisonEffect() {
 		this(1000, 160, 1, false);
@@ -102,7 +103,7 @@ public class PoisonEffect extends StatusEffect {
 		}
 
 		Particle p = CachePools.getParticle();
-		p.tex = poisonTexture + Game.rand.nextInt(poisonTextureVariations-1);
+		p.tex = particleTexture + Game.rand.nextInt(particleTextureVariations -1);
 		p.lifetime = particleLifetime;
 		p.scale = scale;
 		p.startScale = startScale;
@@ -204,20 +205,20 @@ public class PoisonEffect extends StatusEffect {
         this.particleInterval = particleInterval;
     }
 
-    public int getPoisonTexture() {
-        return poisonTexture;
+    public int getParticleTexture() {
+        return particleTexture;
     }
 
-    public void setPoisonTexture(int poisonTexture) {
-        this.poisonTexture = poisonTexture;
+    public void setParticleTexture(int particleTexture) {
+        this.particleTexture = particleTexture;
     }
 
-    public int getPoisonTextureVariations() {
-        return poisonTextureVariations;
+    public int getParticleTextureVariations() {
+        return particleTextureVariations;
     }
 
-    public void setPoisonTextureVariations(int poisonTextureVariations) {
-        this.poisonTextureVariations = poisonTextureVariations;
+    public void setParticleTextureVariations(int particleTextureVariations) {
+        this.particleTextureVariations = particleTextureVariations;
     }
 
     public float getStartScale() {
