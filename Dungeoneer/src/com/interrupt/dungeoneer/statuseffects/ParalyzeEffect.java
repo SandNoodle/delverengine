@@ -23,10 +23,9 @@ public class ParalyzeEffect extends StatusEffect {
 
     private float particleLifetime = 45f;
 
-    private int paralyzeTexture = 71;
-    private int startEffectTexture = 72;
-    private int stopEffectTexture= 79;
-
+    private int particleTexture = 71;
+    private int startTexture = 72;
+    private int stopTexture = 79;
     private float animationSpeed = 20f;
 
     private float scale = 0.75f;
@@ -55,7 +54,7 @@ public class ParalyzeEffect extends StatusEffect {
         this.effectParticle.startScale = 1.0f;
         this.effectParticle.endScale = 1.0f;
         this.effectParticle.checkCollision = false;
-        this.effectParticle.playAnimation(startEffectTexture, stopEffectTexture, animationSpeed, true);
+        this.effectParticle.playAnimation(startTexture, stopTexture, animationSpeed, true);
         Game.GetLevel().SpawnNonCollidingEntity(this.effectParticle);
     }
 
@@ -94,7 +93,7 @@ public class ParalyzeEffect extends StatusEffect {
     private void createParalyzeParticle(Actor owner, Vector3 cameraRight, Vector3 particleDirection, int i) {
         Particle p = CachePools.getParticle();
 
-        p.tex = paralyzeTexture;
+        p.tex = particleTexture;
         p.lifetime = particleLifetime;
         p.scale = scale;
         p.startScale = startScale;
@@ -178,12 +177,12 @@ public class ParalyzeEffect extends StatusEffect {
         this.particleLifetime = particleLifetime;
     }
 
-    public int getParalyzeTexture() {
-        return paralyzeTexture;
+    public int getParticleTexture() {
+        return particleTexture;
     }
 
-    public void setParalyzeTexture(int paralyzeTexture) {
-        this.paralyzeTexture = paralyzeTexture;
+    public void setParticleTexture(int particleTexture) {
+        this.particleTexture = particleTexture;
     }
 
     public float getScale() {
@@ -234,20 +233,20 @@ public class ParalyzeEffect extends StatusEffect {
         this.zVarVelocity = zVarVelocity;
     }
 
-    public int getStartEffectTexture() {
-        return startEffectTexture;
+    public int getStartTexture() {
+        return startTexture;
     }
 
-    public void setStartEffectTexture(int startEffectTexture) {
-        this.startEffectTexture = startEffectTexture;
+    public void setStartTexture(int startTexture) {
+        this.startTexture = startTexture;
     }
 
-    public int getStopEffectTexture() {
-        return stopEffectTexture;
+    public int getStopTexture() {
+        return stopTexture;
     }
 
-    public void setStopEffectTexture(int stopEffectTexture) {
-        this.stopEffectTexture = stopEffectTexture;
+    public void setStopTexture(int stopTexture) {
+        this.stopTexture = stopTexture;
     }
 
     public float getAnimationSpeed() {
